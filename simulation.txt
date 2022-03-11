@@ -1,0 +1,8 @@
+addr = 100
+lenght  = 10
+field  = FIXED
+mem  = 100
+addr = 200
+lenght  = 20
+field  = INCREMENT
+mem  = 0
