@@ -1,3 +1,4 @@
+//change
 typedef enum {FIXED,INCREMENT} burst_t; //enumeration
 class Packet; 
   int packet_lenght;
