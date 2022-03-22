@@ -8,18 +8,19 @@ module test;
     bit [4:0] len;
     packet_q = packet_q_u;
     
-    for (int i = 0;i<5;i++) begin
+    for (int i = 0;i<3;i++) begin
       len = $urandom();
       packet_q_u.pop();
       packet_q.populate(len);
     end
     
     for (int i = 0; i<15;i++) begin
-      fr_pos = $urandom_range(packet_q.frames_q.size());
+      fr_pos = $urandom_range(packet_q.frames_q.size()-1);
       hpf.randomize(payload);
       hpf.parity = hpf.xor_pay(hpf.payload);
       hpf.parity=hpf.corrupt(hpf.parity);
-      packet_q.replace_frame(hpf, fr_pos - 1);
+      packet_q.replace_frame(hpf, fr_pos);
+      
     end
     
     packet_q.print();

@@ -17,7 +17,7 @@ class frame;
   endfunction
   
   function bit corrupt (bit parity);
-    parity = parity ^ 1;
+    parity = ~parity;
     return parity;
   endfunction
   
@@ -27,9 +27,9 @@ class frame;
     
     if (par_bit == parity)
       return 0;
-
      else
       return -1;
+    
   endfunction
   
 endclass
@@ -92,11 +92,9 @@ class uart_packet extends base_packet;
     
     super.populate(8);
 
-    super.frames_q.delete(0);
-    super.frames_q.push_front(start);
+    super.replace_frame(start,0);
+    super.replace_frame(end_,7);
     
-    super.frames_q.delete(7);
-    super.frames_q.push_back(end_);
     
   endfunction
   
