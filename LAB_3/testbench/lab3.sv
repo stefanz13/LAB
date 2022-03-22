@@ -1,25 +1,30 @@
 module test;
   
   high_payload_frames hpf= new;
-  base_packet packet_q = new;
+  base_packet packet_q;
   uart_packet packet_q_u = new;
   initial begin    
-    
+    int fr_pos;
+    bit [4:0] len;
     packet_q = packet_q_u;
-    packet_q_u.pop();
-    packet_q_u.pop();
-    packet_q.populate(5'b01011);
-   
+    
+    for (int i = 0;i<5;i++) begin
+      len = $urandom();
+      packet_q_u.pop();
+      packet_q.populate(len);
+    end
+    
     for (int i = 0; i<15;i++) begin
+      fr_pos = $urandom_range(packet_q.frames_q.size());
       hpf.randomize(payload);
       hpf.parity = hpf.xor_pay(hpf.payload);
       hpf.parity=hpf.corrupt(hpf.parity);
-      packet_q.replace_frame(hpf, i);
+      packet_q.replace_frame(hpf, fr_pos - 1);
     end
     
-    foreach(packet_q_u.frames_q[i])
-      packet_q.check_frame_corruption(packet_q.frames_q[i].payload,packet_q.frames_q[i].parity);
-      
+    packet_q.print();
+    packet_q.check_frame_corruption();
+    
     
   end
 endmodule
